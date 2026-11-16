@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GuardLink - Visitor Management</title><link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f4e79"></head><body>
+<header><span class="brand">🛡️ GuardLink</span><span><a href="help.html">Help</a> · <a href="login.php">Login</a></span></header>
+<section class="hero">
+  <h1>Safe, simple visitor management</h1>
+  <p>No more paper logbooks at the gate. Residents invite, visitors register online, guards verify in seconds, and management always knows who is inside.</p>
+  <a class="btn" href="login.php">Login</a> <a class="btn" href="help.html">How it works</a>
+</section>
+<main>
+  <div class="grid">
+    <div class="card"><h3>🏠 Residents</h3><p>Create an invitation for a guest, send the registration link by SMS or WhatsApp, and cancel it any time.</p></div>
+    <div class="card"><h3>📱 Visitors</h3><p>Open the link, add your name and ID, and get a 6-digit entry code with a QR pass. No account or app needed.</p></div>
+    <div class="card"><h3>💂 Guards</h3><p>Type or scan the code. The system answers <b>Approved</b> or <b>Denied</b>. Works even when the internet drops.</p></div>
+    <div class="card"><h3>📊 Management</h3><p>See who is inside right now, full visit history, peak hours, the audit trail, and manage user accounts.</p></div>
+  </div>
+  <div class="card"><h3>How it works</h3>
+    <ol class="steps"><li>Resident creates an invitation (visitor name, phone, valid time).</li>
+    <li>Visitor receives a link and registers with their ID number.</li>
+    <li>Visitor shows the code or QR pass at the gate.</li>
+    <li>Guard verifies: the code must exist, be registered, be within time and be unused.</li>
+    <li>Check-in and check-out are recorded, and the resident is notified.</li></ol></div>
+</main>
+<footer>GuardLink · Kafoca Mukuru Study Ville · Strathmore University project</footer>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');</script></body></html>
