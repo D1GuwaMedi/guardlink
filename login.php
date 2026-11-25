@@ -18,5 +18,4 @@ top('Login');
 if ($err) echo '<p class="no">' . h($err) . '</p>'; ?>
 <form method="post"><?= csrf() ?><label>Username</label><input name="username" required autofocus>
 <label>Password</label><input type="password" name="password" required><button>Login</button></form>
-<p class="warn">Demo: mary / john (resident), guard1 (guard), manager (management). Password: <b>pass123</b></p>
 <?php bottom();
