@@ -6,19 +6,25 @@ function load($pdo) {
     $s->execute([$_GET['token'] ?? '']); return $s->fetch();
 }
 $inv = load($pdo);
-if ($inv && $inv['status'] === 'pending' && $_SERVER['REQUEST_METHOD'] === 'POST' && trim($_POST['visitor_id_no']) !== '') {
-    $pdo->prepare("UPDATE invitations SET visitor_name=?, visitor_id_no=?, status='registered' WHERE id=? AND status='pending'")
-        ->execute([trim($_POST['visitor_name']), trim($_POST['visitor_id_no']), $inv['id']]);
-    audit($pdo, null, 'VISITOR_REGISTERED', $inv['id']);
-    notify($pdo, $inv['rphone'], 'GuardLink: ' . trim($_POST['visitor_name']) . ' has registered for your invitation.');
-    $inv = load($pdo);
+$err = '';
+if ($inv && $inv['status'] === 'pending' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $idno = trim($_POST['visitor_id_no'] ?? '');
+    if (!preg_match('/^[0-9]{8}$/', $idno)) $err = 'Enter a valid 8-digit ID number.';
+    else {
+        $pdo->prepare("UPDATE invitations SET visitor_name=?, visitor_id_no=?, status='registered' WHERE id=? AND status='pending'")
+            ->execute([trim($_POST['visitor_name']), $idno, $inv['id']]);
+        audit($pdo, null, 'VISITOR_REGISTERED', $inv['id']);
+        notify($pdo, $inv['rphone'], 'GuardLink: ' . trim($_POST['visitor_name']) . ' has registered for your invitation.');
+        $inv = load($pdo);
+    }
 }
 top('Visitor registration');
 if (!$inv) echo '<p class="no">Invalid invitation link.</p>';
 elseif ($inv['status'] === 'pending') { ?>
 <p>You were invited by <b><?= h($inv['resident']) ?></b>.<br>Valid: <?= h($inv['valid_from']) ?> to <?= h($inv['valid_to']) ?></p>
+<?php if ($err) echo '<p class="no">' . h($err) . '</p>'; ?>
 <form method="post"><?= csrf() ?><label>Full name</label><input name="visitor_name" value="<?= h($inv['visitor_name']) ?>" required>
-<label>ID / passport number</label><input name="visitor_id_no" required><button>Register</button></form>
+<label>National ID number (8 digits)</label><input name="visitor_id_no" required><button>Register</button></form>
 <?php } elseif ($inv['status'] === 'registered') { ?>
 <div class="ok">Registered! Show this entry pass at the gate.<h1><?= h($inv['code']) ?></h1><div id="qr"></div>
 <p>Valid <?= h($inv['valid_from']) ?> to <?= h($inv['valid_to']) ?>. Works once.</p></div>
